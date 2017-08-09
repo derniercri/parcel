@@ -1,12 +1,17 @@
 const Gp = require("geoportal-access-lib")
+const GeoportalWfsClient = require('./libs/geoportal-wfs-client')
 
-const key = '22726iz9m8ficsgf2hmiicpd'
+require('dotenv').config()
+const key = process.env.API_KEY
+const username = process.env.USER
+const password = process.env.PASSWORD
+const referer = process.env.REFERER
 const address = '24 rue de strasbourg armentieres'
 
 const findAddress = (address) => {
   return new Promise((resolve,reject) => {
     Gp.Services.autoComplete({
-      apiKey : key, 
+      apiKey : key,
       text : address,      
       filterOptions : {
           type : ["StreetAddress"]
@@ -41,6 +46,16 @@ const fetchParcel = (x, y) => {
     })
   })
 }
+
+var client = new GeoportalWfsClient(key,{})
+
+client.getTypeNames()
+.then((typeNames) => {
+    console.log(typeNames);
+})
+.catch((err) =>{
+    console.log(err);
+})
 
 findAddress(address).then(address => {
   return address.suggestedLocations[0].position
