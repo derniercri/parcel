@@ -24,7 +24,7 @@ const findAddress = (address) => {
   })
 }
 
-const fetchParcel = (x, y) => {
+const fetchParcelInfo = (x, y) => {
   return new Promise((resolve, reject) => {
     Gp.Services.reverseGeocode({
       apiKey : key, 
@@ -45,28 +45,54 @@ const fetchParcel = (x, y) => {
   })
 }
 
+client.getTypeNames()
+.then(function(typeNames){
+    console.log(typeNames);
+})
+.catch(function(err){
+    console.log(err);
+})
+
+const fetchParcelVectors = (dep, city, number, section, sheet) => {
+  return client.getFeatures('BDPARCELLAIRE-VECTEUR_WLD_BDD_WGS84G:parcelle',
+    {
+      code_dep: dep,
+      code_com: city,
+      numero: number,
+      section: section,
+      feuille: sheet,
+      _limit: 10
+    }
+  )
+}
+
+const fetchBuildingsVectors = (dep, city, number) => {
+  return client.getFeatures('BDTOPO_BDD_WLD_WGS84G:bati_indifferencie',
+    {
+      //code_dep: dep,
+      //code_com: city,
+      //numero: number,
+      //_limit: 1
+    }
+  )
+}
+
 findAddress(address).then(address => {
   return address.suggestedLocations[0].position
 }).then(position => {
-  return fetchParcel(position.x, position.y)
+  return fetchParcelInfo(position.x, position.y)
 }).then(result => {
   const parcel = result.locations[0].placeAttributes
   console.log('Parcel informations')
   console.log(JSON.stringify(parcel, null, 2))
 
-  var params = {
-    code_dep: parcel.department,
-    code_com: parcel.commune,
-    numero: parcel.number,
-    _limit: 1
-  };
+  fetchParcelVectors(parcel.department, parcel.commune, parcel.number, parcel.section, parseInt(parcel.sheet)).then(featureCollection => {
+    console.log('\n\nParcel vectors')
+    console.log(JSON.stringify(featureCollection, null, 2));
+  })
 
-  client.getFeatures("BDPARCELLAIRE-VECTEUR_WLD_BDD_WGS84G:parcelle",params)
-    .then(function(featureCollection){
-      console.log('\n\nParcel vectors')
-      console.log(JSON.stringify(featureCollection, null, 2));
-    })
-    .catch(function(err){
-        console.log(err);
-    })
+  /*fetchBuildingsVectors(parcel.department, parcel.commune, parcel.number).then(featureCollection => {
+    console.log('\n\nBuildings vectors')
+    console.log(featureCollection);
+  })*/
 })
