@@ -1,0 +1,15 @@
+{
+  "name": "wms",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "geoportal-access-lib": "^1.0.1",
+    "wms-client": "^3.0.1"
+  }
+}
