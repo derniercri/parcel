@@ -10984,6 +10984,7 @@ Client.prototype.getFeatures = function(typeName, params){
     }
 
     options.transform = function(body){
+			console.log(body)
         return JSON.parse(body);
     };
 

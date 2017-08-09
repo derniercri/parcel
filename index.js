@@ -67,12 +67,14 @@ const fetchParcelVectors = (dep, city, number, section, sheet) => {
 }
 
 const fetchBuildingsVectors = (dep, city, number) => {
-  return client.getFeatures('BDTOPO_BDD_WLD_WGS84G:bati_indifferencie',
+  return client.getFeatures('BDPARCELLAIRE-VECTEUR_WLD_BDD_WGS84G:batiment',
     {
-      //code_dep: dep,
-      //code_com: city,
-      //numero: number,
-      //_limit: 1
+      code_dep: dep,
+      code_com: city,
+      numero: number,
+      section: section,
+      feuille: sheet,
+      _limit: 10
     }
   )
 }
@@ -91,8 +93,8 @@ findAddress(address).then(address => {
     console.log(JSON.stringify(featureCollection, null, 2));
   })
 
-  /*fetchBuildingsVectors(parcel.department, parcel.commune, parcel.number).then(featureCollection => {
+  fetchBuildingsVectors(parcel.department, parcel.commune, parcel.number).then(featureCollection => {
     console.log('\n\nBuildings vectors')
     console.log(featureCollection);
-  })*/
+  })
 })
