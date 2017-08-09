@@ -3,10 +3,8 @@ const GeoportalWfsClient = require('./libs/geoportal-wfs-client')
 
 require('dotenv').config()
 const key = process.env.API_KEY
-const username = process.env.USER
-const password = process.env.PASSWORD
-const referer = process.env.REFERER
 const address = '24 rue de strasbourg armentieres'
+const client = new GeoportalWfsClient(key)
 
 const findAddress = (address) => {
   return new Promise((resolve,reject) => {
@@ -47,20 +45,28 @@ const fetchParcel = (x, y) => {
   })
 }
 
-var client = new GeoportalWfsClient(key,{})
-
-client.getTypeNames()
-.then((typeNames) => {
-    console.log(typeNames);
-})
-.catch((err) =>{
-    console.log(err);
-})
-
 findAddress(address).then(address => {
   return address.suggestedLocations[0].position
 }).then(position => {
   return fetchParcel(position.x, position.y)
 }).then(result => {
-  console.log(JSON.stringify(result.locations[0], null, 2))
+  const parcel = result.locations[0].placeAttributes
+  console.log('Parcel informations')
+  console.log(JSON.stringify(parcel, null, 2))
+
+  var params = {
+    code_dep: parcel.department,
+    code_com: parcel.commune,
+    numero: parcel.number,
+    _limit: 1
+  };
+
+  client.getFeatures("BDPARCELLAIRE-VECTEUR_WLD_BDD_WGS84G:parcelle",params)
+    .then(function(featureCollection){
+      console.log('\n\nParcel vectors')
+      console.log(JSON.stringify(featureCollection, null, 2));
+    })
+    .catch(function(err){
+        console.log(err);
+    })
 })
