@@ -2,15 +2,18 @@
   "name": "wms",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
+    "start": "node src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^4.0.0",
+    "geojson-area": "^0.2.1",
     "geoportal-access-lib": "^1.0.1",
+    "pg": "^7.1.0",
     "wms-client": "^3.0.1",
     "xmlhttprequest": "^1.8.0"
   }
