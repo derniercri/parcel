@@ -18,8 +18,7 @@ gpClient.findAddress(address).then(address => {
   return gpClient.fetchParcelInfo(position.x, position.y)
 }).then(result => {
   const parcel = result.locations[0].placeAttributes
-  console.log('Parcel informations')
-  console.log(JSON.stringify(parcel, null, 2))
+  console.log(`Parcel number ${parcel.cadastralParcel}`)
 
   gpClient.fetchParcelVectors(parcel.department, parcel.commune, parcel.number, parcel.section, parseInt(parcel.sheet)).then(featureCollection => {
     const area = featureCollection.features[0].geometry.coordinates[0][0]
