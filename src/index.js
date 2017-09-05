@@ -9,7 +9,8 @@ const bbox = (pointsRaw) => turf.bbox(turf.lineString(pointsRaw))
 require('dotenv').config()
 const key = process.env.API_KEY
 const pg = new Client(process.env.POSTGRES)
-const address = '26 rue de strasbourg armentieres'
+//const address = '24 rue de strasbourg armentieres'
+const address = '16 rue gallieni lille'
 
 pg.connect().then(()=> console.log(`connected`));
 //const getArea = require('./area')(pg);
@@ -27,6 +28,8 @@ gpClient.findAddress(address).then(address => {
 
   gpClient.fetchParcelVectors(parcel.department, parcel.commune, parcel.number, parcel.section, parseInt(parcel.sheet)).then(featureCollection => {
     const area = featureCollection.features[0].geometry.coordinates[0]
+    //console.log(JSON.stringify())
+    console.log(`Area is: ${areaCompute(featureCollection.features[0])} `)
     const parcelFeature = featureCollection.features[0]
     gpClient.fetchBuildingsVectors(bbox(area[0])).then((collection) => {
       return collection.features
@@ -35,6 +38,9 @@ gpClient.findAddress(address).then(address => {
       
         console.log(collection, null, 2)
 
-    }).then(batiments => console.log(JSON.stringify(batiments)))
+    }).then(buildings => {
+      console.log(JSON.stringify(buildings))
+      buildings.map(building => {console.log(`Area is: ${areaCompute(building)} `)})
+    })
   })
 })
