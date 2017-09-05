@@ -10907,7 +10907,10 @@ var rp = function(options){
     };
     if ( options.transform ){
         axiosOptions.transformResponse = [options.transform] ;
-    }
+		}
+		
+		//console.log(options.uri)
+		//console.log(axiosOptions)
     return axios.get(
         options.uri,
         axiosOptions
@@ -10981,8 +10984,8 @@ Client.prototype.getFeatures = function(typeName, params){
     }
     if ( typeof params._start !== 'undefined' ){
         options.qs.startIndex = parseInt(params._start);
-    }
-
+		}
+		
     options.transform = function(body){
         return JSON.parse(body);
     };

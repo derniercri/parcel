@@ -55,24 +55,22 @@ module.exports = key => {
                 }
             )
         },
-        fetchBuildingsVectors: () => {
+        /*fetchBuildingsVectors: () => {
             return client.getFeatures(
                 'ADRESSE-PREMIUM.LIEN.PARCELLE:lien_adresse_parcelle',
                 {
                     _limit: 10
                 }
             )
-        }
-        /*fetchBuildingsVectors: (dep, city, number) => {
+        }*/
+        fetchBuildingsVectors: (bbox) => {
             return client.getFeatures(
-                'BDPARCELLAIRE-VECTEUR_WLD_BDD_WGS84G:batiment',
+                'BDTOPO_BDD_WLD_WGS84G:bati_remarquable,BDTOPO_BDD_WLD_WGS84G:bati_indifferencie',
                 {
-                    //code_dep: dep,
-                    //code_com: city,
-                    numero: number,
+                    bbox: `${bbox[0]},${bbox[1]},${bbox[2]},${bbox[3]}`,
                     _limit: 10
                 }
             )
-        }*/
+        }
     }
 }

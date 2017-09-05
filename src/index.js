@@ -2,6 +2,9 @@ const { Client } = require('pg')
 const GpClient = require('./geoportail')
 const areaCompute = require('./area2')
 var geojsonArea = require('geojson-area')
+const turf = require('@turf/turf')
+
+const bbox = (pointsRaw) => turf.bbox(turf.lineString(pointsRaw))
 
 require('dotenv').config()
 const key = process.env.API_KEY
@@ -25,11 +28,12 @@ gpClient.findAddress(address).then(address => {
   gpClient.fetchParcelVectors(parcel.department, parcel.commune, parcel.number, parcel.section, parseInt(parcel.sheet)).then(featureCollection => {
     const area = featureCollection.features[0].geometry.coordinates[0]
     console.log(areaCompute(area))
+    gpClient.fetchBuildingsVectors(bbox(area[0])).then((res) => {
+      console.log(JSON.stringify(res, null, 2))
+    })
   })
 
-  /*gpClient.fetchBuildingsVectors().then((res) => {
-    console.log(JSON.stringify(res, null, 2))
-  })*/
+  
 
   /*gpClient.fetchBuildingsVectors(parcel.department, parcel.commune, parcel.number).then(featureCollection => {
     console.log('\n\nBuildings vectors')
