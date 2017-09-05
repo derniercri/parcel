@@ -23,20 +23,13 @@ gpClient.findAddress(address).then(address => {
 }).then(result => {
   const parcel = result.locations[0].placeAttributes
   console.log(JSON.stringify(result.locations[0], null, 2))
-  console.log(`Parcel number ${parcel.cadastralParcel}`)
+  console.log(`Parcel number ${JSON.stringify(parcel)}`)
 
   gpClient.fetchParcelVectors(parcel.department, parcel.commune, parcel.number, parcel.section, parseInt(parcel.sheet)).then(featureCollection => {
     const area = featureCollection.features[0].geometry.coordinates[0]
-    console.log(areaCompute(area))
-    gpClient.fetchBuildingsVectors(bbox(area[0])).then((res) => {
-      console.log(JSON.stringify(res, null, 2))
-    })
+    const parcelFeature = featureCollection.features[0]
+    gpClient.fetchBuildingsVectors(bbox(area[0])).then((collection) => {
+      return collection.features.filter(feature => turf.intersect(parcelFeature, feature))
+    }).then(batiments => console.log(JSON.stringify(batiments, null, 2)))
   })
-
-  
-
-  /*gpClient.fetchBuildingsVectors(parcel.department, parcel.commune, parcel.number).then(featureCollection => {
-    console.log('\n\nBuildings vectors')
-    console.log(featureCollection);
-  })*/
 })
