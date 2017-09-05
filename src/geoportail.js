@@ -55,7 +55,15 @@ module.exports = key => {
                 }
             )
         },
-        fetchBuildingsVectors: (dep, city, number) => {
+        fetchBuildingsVectors: () => {
+            return client.getFeatures(
+                'ADRESSE-PREMIUM.LIEN.PARCELLE:lien_adresse_parcelle',
+                {
+                    _limit: 10
+                }
+            )
+        }
+        /*fetchBuildingsVectors: (dep, city, number) => {
             return client.getFeatures(
                 'BDPARCELLAIRE-VECTEUR_WLD_BDD_WGS84G:batiment',
                 {
@@ -65,6 +73,6 @@ module.exports = key => {
                     _limit: 10
                 }
             )
-        }
+        }*/
     }
 }

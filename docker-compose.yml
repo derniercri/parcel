@@ -1,7 +1,0 @@
-db:
-  image: mdillon/postgis
-  ports:
-  - "15432:5432"
-  environment:
-    POSTGRES_USER: "docker"
-    POSTGRES_PASSWORD: "docker"

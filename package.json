@@ -10,6 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@turf/buffer": "^4.6.1",
+    "@turf/turf": "^4.6.1",
     "dotenv": "^4.0.0",
     "geojson-area": "^0.2.1",
     "geoportal-access-lib": "^1.0.1",
