@@ -29,7 +29,9 @@ gpClient.findAddress(address).then(address => {
     const area = featureCollection.features[0].geometry.coordinates[0]
     const parcelFeature = featureCollection.features[0]
     gpClient.fetchBuildingsVectors(bbox(area[0])).then((collection) => {
-      return collection.features.filter(feature => turf.intersect(parcelFeature, feature))
+      return collection.features
+        .filter(feature => turf.intersect(parcelFeature, feature))
+
     }).then(batiments => console.log(JSON.stringify(batiments, null, 2)))
   })
 })
